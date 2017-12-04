@@ -43,6 +43,7 @@ public class RestoDatabase extends SQLiteOpenHelper {
 
     public void addItem(String name, float price) {
         SQLiteDatabase db = getWritableDatabase();
+        // If it doesn't exist yet, add a new entry
         if (!db.rawQuery("SELECT amount FROM resto WHERE name = '" + name + "'", null).moveToFirst()) {
             System.out.println("new item added");
             ContentValues contentValues = new ContentValues();
@@ -50,6 +51,7 @@ public class RestoDatabase extends SQLiteOpenHelper {
             contentValues.put("price", price);
             contentValues.put("amount", 1);
             db.insert("resto", null, contentValues);
+        // If it already exists, update the item count in the database
         } else {
             System.out.println("existing item added");
             db.execSQL("UPDATE resto SET amount = amount + 1 WHERE name = '" + name + "'");
@@ -58,6 +60,7 @@ public class RestoDatabase extends SQLiteOpenHelper {
     }
 
     public void clear() {
+        // Drop the table and create an empty one
         System.out.println("CLEARING DATABASE");
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS resto");

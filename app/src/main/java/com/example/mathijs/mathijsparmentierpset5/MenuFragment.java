@@ -113,6 +113,8 @@ public class MenuFragment extends ListFragment {
         String clickedItem = l.getItemAtPosition(position).toString();
         RestoDatabase db = RestoDatabase.getInstance(getContext());
 
+        // Loops until it finds an entry with the same name as the one that's clicked
+        // And it adds that item
         for (int i = 0; i < menu.length(); i++) {
             try {
                 float price = Float.parseFloat(menu.getJSONObject(i).getString("price"));

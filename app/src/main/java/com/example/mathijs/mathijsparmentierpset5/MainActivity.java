@@ -9,15 +9,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.showCart:
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                OrderFragment fragment = new OrderFragment();
-                fragment.show(ft, "dialog");
-        }
-        return super.onOptionsItemSelected(item);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        // Set up the menu fragment for categories
+        FragmentManager fm = getSupportFragmentManager();
+        CategoriesFragment fragment = new CategoriesFragment();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.fragment_container, fragment, "categories");
+        ft.commit();
     }
 
     @Override
@@ -30,17 +33,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        FragmentManager fm = getSupportFragmentManager();
-        CategoriesFragment fragment = new CategoriesFragment();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.fragment_container, fragment, "categories");
-        ft.commit();
-
-
-        RestoDatabase db = RestoDatabase.getInstance(getApplicationContext());
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Show the cart when selected
+        switch (item.getItemId()) {
+            case R.id.showCart:
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                OrderFragment fragment = new OrderFragment();
+                fragment.show(ft, "dialog");
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

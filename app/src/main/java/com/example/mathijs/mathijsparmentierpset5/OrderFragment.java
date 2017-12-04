@@ -45,6 +45,7 @@ public class OrderFragment extends DialogFragment implements View.OnClickListene
         RestoAdapter adapter = new RestoAdapter(getContext(), cursor);
         listView.setAdapter(adapter);
 
+        // Set up buttons
         Button sendButton = (Button) view.findViewById(R.id.sendOrder);
         Button cancelButton = (Button) view.findViewById(R.id.cancelOrder);
         Button clearButton = (Button) view.findViewById(R.id.clearOrder);
@@ -80,6 +81,7 @@ public class OrderFragment extends DialogFragment implements View.OnClickListene
         RequestQueue queue = Volley.newRequestQueue(getContext());
         String url = "https://resto.mprog.nl/order";
 
+        // Make a new POST request to get the waiting time
         StringRequest postRequest = new StringRequest(
                 Request.Method.POST,
                 url,
