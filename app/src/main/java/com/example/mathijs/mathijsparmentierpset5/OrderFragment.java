@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -22,6 +23,8 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import static java.lang.Integer.parseInt;
 
 
 /**
@@ -54,7 +57,25 @@ public class OrderFragment extends DialogFragment implements View.OnClickListene
         cancelButton.setOnClickListener(this);
         clearButton.setOnClickListener(this);
 
+        // Get total price and set it as title
+        int totalPrice = getTotalPrice(cursor);
+        TextView title = (TextView) view.findViewById(R.id.title);
+        title.setText("Total price: " + totalPrice);
+
+
         return view;
+    }
+
+    private int getTotalPrice(Cursor cursor) {
+        int total = 0;
+        if (cursor.moveToFirst()) {
+            while (cursor.moveToNext()) {
+                int price = Integer.parseInt(cursor.getString(cursor.getColumnIndex("price")));
+                int amount = Integer.parseInt(cursor.getString(cursor.getColumnIndex("amount")));
+                total += (price * amount);
+            }
+        }
+        return total;
     }
 
     @Override
