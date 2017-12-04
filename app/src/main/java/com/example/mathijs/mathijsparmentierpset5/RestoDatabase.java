@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 /**
  * Created by Mathijs on 27/11/2017.
@@ -36,24 +37,30 @@ public class RestoDatabase extends SQLiteOpenHelper {
         return instance;
     }
 
-    public void addItem(String name, int price) {
+    public Cursor selectAll() {
+        return getWritableDatabase().rawQuery("SELECT * FROM resto", null);
+    }
+
+    public void addItem(String name, float price) {
         SQLiteDatabase db = getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT name FROM resto WHERE name = " + name, null);
-        if (cursor.getCount() < 1) {
+        if (!db.rawQuery("SELECT amount FROM resto WHERE name = '" + name + "'", null).moveToFirst()) {
+            System.out.println("new item added");
             ContentValues contentValues = new ContentValues();
             contentValues.put("name", name);
             contentValues.put("price", price);
             contentValues.put("amount", 1);
             db.insert("resto", null, contentValues);
         } else {
-            db.execSQL("UPDATE resto SET amount = amount + 1 WHERE name = " + name, null);
+            System.out.println("existing item added");
+            db.execSQL("UPDATE resto SET amount = amount + 1 WHERE name = '" + name + "'");
         }
+        System.out.println(name + " added");
     }
 
     public void clear() {
+        System.out.println("CLEARING DATABASE");
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS resto");
         onCreate(db);
     }
-
 }

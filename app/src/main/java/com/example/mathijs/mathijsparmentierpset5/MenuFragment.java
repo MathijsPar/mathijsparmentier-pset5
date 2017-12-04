@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -32,7 +33,8 @@ import java.util.List;
  */
 public class MenuFragment extends ListFragment {
 
-    List<String> menu = new ArrayList<String>();
+    List<String> menuList = new ArrayList<String>();
+    JSONArray menu = new JSONArray();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,14 +61,16 @@ public class MenuFragment extends ListFragment {
                             items = response.getJSONArray("items");
                             for (int i = 0; i < items.length(); i++) {
                                 if(items.getJSONObject(i).optString("category").equals(category)) {
-                                    menu.add(items.getJSONObject(i).optString("name"));
+                                    JSONObject item = new JSONObject();
+                                    String name = items.getJSONObject(i).optString("name");
+                                    String price = items.getJSONObject(i).optString("price");
+                                    item.put("name", name);
+                                    item.put("price", price);
+                                    menu.put(item);
 
-                                    name.setText(items.getJSONObject(i).optString("price"));
-
-                                    description.setText(items.getJSONObject(i).optString("description"));
+                                    menuList.add(name);
                                 }
                             }
-                            System.out.println(menu.toString());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -90,7 +94,7 @@ public class MenuFragment extends ListFragment {
                 new ArrayAdapter<String>(
                         getContext(),
                         android.R.layout.simple_list_item_1,
-                        menu
+                        menuList
                 );
         this.setListAdapter(adapter);
     }
@@ -106,6 +110,19 @@ public class MenuFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
+        String clickedItem = l.getItemAtPosition(position).toString();
+        RestoDatabase db = RestoDatabase.getInstance(getContext());
 
+        for (int i = 0; i < menu.length(); i++) {
+            try {
+                float price = Float.parseFloat(menu.getJSONObject(i).getString("price"));
+                db.addItem(clickedItem, price);
+                Toast addedItem = Toast.makeText(getContext(), clickedItem + " added!", Toast.LENGTH_LONG);
+                addedItem.show();
+                break;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

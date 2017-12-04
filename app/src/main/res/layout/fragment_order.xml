@@ -1,13 +1,46 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.mathijs.mathijsparmentierpset5.OrderFragment">
+    android:orientation="vertical"
+    tools:context="com.example.mathijs.mathijsparmentierpset5.OrderFragment"
+    android:weightSum="1">
 
-    <!-- TODO: Update blank fragment layout -->
 
     <ListView
         android:id="@+id/orderList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</FrameLayout>
+        android:layout_height="fill_parent"
+        android:layout_weight="0.1">
+
+    </ListView>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.9"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/cancelOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="cancel" />
+
+        <Button
+            android:id="@+id/clearOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="clear" />
+
+        <Button
+            android:id="@+id/sendOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="send" />
+
+    </LinearLayout>
+
+</LinearLayout>
